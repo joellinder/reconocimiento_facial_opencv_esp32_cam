@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{% if edit %}Editar Usuario{% else %}Nuevo Usuario{% endif %}{% endblock %}
+{% block content %}
+<section class="panel">
+  <h2>{% if edit %}Editar usuario{% else %}Crear usuario{% endif %}</h2>
+  <form method="post">
+    <label>Usuario</label>
+    <input type="text" name="username" required value="{{ user['username'] if edit else '' }}">
+    <label>Contraseña{% if edit %} (dejar vacío para no cambiar){% endif %}</label>
+    <input type="password" name="password" {% if not edit %}required{% endif %}>
+    <label><input type="checkbox" name="is_admin" {% if edit and user['is_admin']==1 %}checked{% endif %}> Administrador</label>
+    <button class="btn btn-primary" type="submit">{% if edit %}Actualizar{% else %}Crear{% endif %}</button>
+  </form>
+</section>
+{% endblock %}

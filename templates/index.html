@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<section class="panel hero">
+  <h1>Panel Principal</h1>
+  <p class="muted">Abre la transmisión y la captura en ventanas separadas (popup).</p>
+
+  <div class="controls">
+    <button id="openTransmision" class="btn btn-primary">Abrir transmisión (ventana)</button>
+    <button id="openCaptura" class="btn">Registrar autorizado (ventana)</button>
+    <a class="btn ghost" href="{{ url_for('autorizados_page') }}">Ver autorizados</a>
+    <a class="btn ghost" href="{{ url_for('intrusos_page') }}">Ver intrusos</a>
+  </div>
+
+  <h3 style="margin-top:18px">Autorizados recientes</h3>
+  <div class="grid" style="margin-top:12px">
+    {% for a in autorizados[:6] %}
+      <div class="card">
+        <img src="{{ url_for('serve_autorizado', filename=a['filename']) }}" class="intruso-img" alt="{{ a['nombre'] }}">
+        <div class="card-body">
+          <strong>{{ a['nombre'] }}</strong>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

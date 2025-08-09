@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Autorizados{% endblock %}
+{% block content %}
+<section class="panel">
+  <h2>Autorizados</h2>
+  <a class="btn" href="{{ url_for('captura_autorizado') }}" target="_blank">Capturar nuevo (ventana)</a>
+  <a class="btn" href="{{ url_for('registrar_autorizado') }}">Registrar (subida)</a>
+
+  <div class="grid" style="margin-top:12px">
+    {% for a in autorizados %}
+      <div class="card">
+        <img src="{{ url_for('serve_autorizado', filename=a['filename']) }}" class="intruso-img">
+        <div class="card-body">
+          <strong>{{ a['nombre'] }}</strong>
+          <form method="post" action="{{ url_for('autorizados_eliminar', aid=a['id']) }}" onsubmit="return confirm('Eliminar autorizado?')" style="margin-top:8px">
+            <button class="btn btn-danger" type="submit">Eliminar foto</button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

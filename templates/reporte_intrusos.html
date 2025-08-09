@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Reporte Intrusos{% endblock %}
+{% block content %}
+<section class="panel">
+  <h2>Reporte de Intrusos</h2>
+  {% if intrusos|length == 0 %}
+    <p>No hay intrusos registrados.</p>
+  {% else %}
+    <div class="grid">
+      {% for it in intrusos %}
+        <div class="card">
+          <img src="{{ url_for('serve_intruso', filename=it['filename']) }}" class="intruso-img" alt="intruso">
+          <div class="card-body">
+            <p class="muted">{{ it['fecha_hora'] }}</p>
+            <form method="post" action="{{ url_for('intrusos_eliminar', iid=it['id']) }}" onsubmit="return confirm('Eliminar registro?')">
+              <button class="btn btn-danger" type="submit">Eliminar</button>
+            </form>
+            <a class="btn ghost" href="{{ url_for('serve_intruso', filename=it['filename']) }}" download>Descargar</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

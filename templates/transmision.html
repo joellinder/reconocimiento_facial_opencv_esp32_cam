@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Transmisión{% endblock %}
+{% block content %}
+<section class="panel">
+  <h2>Transmisión en vivo</h2>
+  <p class="muted">Ventana de transmisión — pulsa Cerrar para detener la visualización.</p>
+  <div style="display:flex;gap:12px;margin-top:12px;">
+    <button id="btnCerrar" class="btn btn-danger">Cerrar transmisión</button>
+  </div>
+  <div style="margin-top:18px;text-align:center;">
+    <img id="videoImg" src="{{ url_for('video_feed') }}" style="max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,0.04)">
+  </div>
+  <script>
+    document.getElementById("btnCerrar").addEventListener("click", ()=> {
+      fetch("{{ url_for('stop_video') }}", { method: "POST" })
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("videoImg").src = "";
+          setTimeout(()=> window.close(), 300);
+        })
+        .catch(err => {
+          console.error("Error al detener la cámara:", err);
+          document.getElementById("videoImg").src = "";
+          setTimeout(()=> window.close(), 300);
+        });
+    });
+  </script>
+</section>
+{% endblock %}

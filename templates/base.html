@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}Seguridad Facial{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="left">
+      {% if logo_exists %}
+        <img src="{{ url_for('static', filename='logo-unmsm.png') }}" class="logo" alt="logo">
+      {% else %}
+        <span class="app-title">Seguridad Facial</span>
+      {% endif %}
+    </div>
+    <div class="right">
+      {% if session.get('usuario') %}
+        <a class="btn ghost" href="{{ url_for('index') }}">Inicio</a>
+        <a class="btn ghost" href="{{ url_for('intrusos_page') }}">Reporte</a>
+        {% if session.get('is_admin') %}
+          <a class="btn ghost" href="{{ url_for('usuarios') }}">Usuarios</a>
+        {% endif %}
+        <a class="btn ghost" href="{{ url_for('autorizados_page') }}">Autorizados</a>
+        <a class="btn ghost" href="{{ url_for('logout') }}">Salir</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=false) %}
+      {% if messages %}
+        <div class="flash-area">
+          {% for msg in messages %}
+            <div class="flash">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

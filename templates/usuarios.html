@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block content %}
+<section class="panel">
+  <h2>Usuarios</h2>
+  <a class="btn btn-primary" href="{{ url_for('usuarios_nuevo') }}">Nuevo usuario</a>
+  <table class="table" style="margin-top:12px">
+    <thead><tr><th>ID</th><th>Usuario</th><th>Admin</th><th>Acciones</th></tr></thead>
+    <tbody>
+      {% for u in usuarios %}
+      <tr>
+        <td>{{ u['id'] }}</td>
+        <td>{{ u['username'] }}</td>
+        <td>{{ 'Sí' if u['is_admin']==1 else 'No' }}</td>
+        <td>
+          <a class="btn" href="{{ url_for('usuarios_editar', uid=u['id']) }}">Editar</a>
+          <form method="post" action="{{ url_for('usuarios_eliminar', uid=u['id']) }}" style="display:inline" onsubmit="return confirm('Eliminar usuario?')">
+            <button class="btn btn-danger" type="submit">Eliminar</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Captura Autorizado{% endblock %}
+{% block content %}
+<section class="panel">
+  <h2>Capturar autorizado</h2>
+  <p class="muted">Toma foto desde la cámara y registra la persona autorizada.</p>
+
+  <div class="video-box" style="margin-top:12px;">
+    <video id="camPreview" autoplay playsinline muted style="width:640px;max-width:100%;border-radius:8px;background:#000"></video>
+  </div>
+
+  <div style="display:flex;gap:10px;align-items:center;margin-top:10px;">
+    <input id="nombreInput" type="text" placeholder="Nombre completo" style="flex:1;padding:10px;border-radius:8px">
+    <button id="btnTake" class="btn btn-primary">Tomar foto</button>
+    <button id="btnSend" class="btn" disabled>Registrar</button>
+  </div>
+
+  <div id="previewContainer" style="margin-top:12px;"></div>
+
+  <script>
+    let stream = null;
+    const preview = document.getElementById("camPreview");
+    const btnTake = document.getElementById("btnTake");
+    const btnSend = document.getElementById("btnSend");
+    const nombreInput = document.getElementById("nombreInput");
+    const previewContainer = document.getElementById("previewContainer");
+
+    async function startCamera(){
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({video:true, audio:false});
+        preview.srcObject = stream;
+      } catch(e){
+        alert("No se pudo acceder a la cámara: " + e.message);
+      }
+    }
+    startCamera();
+
+    let lastData = null;
+    btnTake.addEventListener("click", ()=> {
+      const w = preview.videoWidth, h = preview.videoHeight;
+      const c = document.createElement("canvas"); c.width = w; c.height = h;
+      c.getContext("2d").drawImage(preview,0,0,w,h);
+      const data = c.toDataURL("image/jpeg", 0.9);
+      lastData = data;
+      previewContainer.innerHTML = '<img src="'+data+'" style="max-width:320px;border-radius:8px">';
+      btnSend.disabled = false;
+      showToast("Foto tomada. Presiona Registrar.");
+    });
+
+    btnSend.addEventListener("click", async ()=> {
+      const nombre = nombreInput.value.trim();
+      if(!nombre){ showToast("Ingresa el nombre"); return; }
+      if(!lastData){ showToast("Toma una foto primero"); return; }
+      btnSend.disabled = true;
+      showToast("Registrando...", 10000);
+      try {
+        const r = await fetch("/api/registrar_autorizado", {
+          method:"POST",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify({ nombre: nombre, image: lastData })
+        });
+        const j = await r.json();
+        if(j.ok){
+          showToast("Autorizado registrado ✓", 4000);
+          setTimeout(()=> window.close(), 900);
+        } else {
+          showToast("Error: " + (j.msg || "unknown"));
+        }
+      } catch(e){
+        showToast("Error de red: " + e.message);
+      }
+      btnSend.disabled = false;
+    });
+
+    function showToast(text, time=3500){
+      const t = document.createElement("div");
+      t.className="toast";
+      t.innerText = text;
+      document.body.appendChild(t);
+      setTimeout(()=> t.classList.add("visible"),50);
+      setTimeout(()=> { t.classList.remove("visible"); setTimeout(()=> t.remove(),200); }, time);
+    }
+  </script>
+</section>
+{% endblock %}

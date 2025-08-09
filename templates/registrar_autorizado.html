@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Registrar Autorizado (subida){% endblock %}
+{% block content %}
+<section class="panel">
+  <h2>Registrar autorizado (subida de imagen)</h2>
+  <form method="post" enctype="multipart/form-data" action="{{ url_for('registrar_autorizado') }}">
+    <label>Nombre</label>
+    <input type="text" name="nombre" required>
+    <label>Imagen</label>
+    <input type="file" name="imagen" accept="image/*" required>
+    <button class="btn btn-primary" type="submit">Registrar</button>
+  </form>
+</section>
+{% endblock %}

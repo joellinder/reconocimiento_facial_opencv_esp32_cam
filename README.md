@@ -1,81 +1,146 @@
-Manual Técnico del Sistema de 
-Reconocimiento Facial con Flask 
-Versión 1.6 
-Fecha: Agosto 2025 
-Autor: Equipo de Desarrollo 
+<h1 align="center">Sistema de Reconocimiento Facial con Flask</h1>
 
-1. Introducción 
-Este manual técnico describe la arquitectura, componentes, instalación, configuración, operación 
-y mantenimiento del sistema de reconocimiento facial desarrollado con Flask, OpenCV y 
-face_recognition. El objetivo es proporcionar a administradores y desarrolladores la información 
-necesaria para desplegar, operar y extender la aplicación.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.8%2B-blue" alt="Python">
+  <img src="https://img.shields.io/badge/Flask-Framework-green" alt="Flask">
+  <img src="https://img.shields.io/badge/OpenCV-4.x-orange" alt="OpenCV">
+  <img src="https://img.shields.io/badge/face_recognition-1.x-red" alt="Face Recognition">
+</p>
 
-2. Descripción General del Sistema 
-El sistema permite la detección y reconocimiento de rostros en tiempo real mediante una cámara 
-ESP32-CAM. Integra una interfaz web para gestionar usuarios, personas autorizadas y revisar 
-registros de intrusos. Utiliza embeddings faciales para la verificación de identidad y almacena 
-datos en SQLite y el sistema de archivos.
+<h2>📌 Descripción</h2>
+<p>
+Este proyecto implementa un <strong>sistema de detección y reconocimiento facial en tiempo real</strong> utilizando 
+<strong>Flask</strong>, <strong>OpenCV</strong> y la librería <strong>face_recognition</strong>.  
+Está diseñado para trabajar con una <strong>cámara ESP32-CAM</strong>, permitiendo gestionar usuarios autorizados, registrar intrusos y visualizar transmisiones en vivo desde una interfaz web.
+</p>
 
-3. Arquitectura 
-La arquitectura sigue una separación por capas: 
-• Capa Web (Flask): autenticación, sesiones, vistas HTML, API JSON. 
-• Motor de Reconocimiento: procesamiento de video, detección y comparación de rostros. 
-• Persistencia: base de datos SQLite y sistema de archivos para imágenes y embeddings. 
-• Dispositivo de captura: ESP32-CAM como fuente de video MJPEG.
+<hr>
 
-4. Requisitos
-4.1 Hardware 
-• Servidor o PC con Python 3.8 o superior. 
-• ESP32-CAM con firmware para transmitir video MJPEG. 
-• Cámara con resolución mínima de 640x480. 
-• Almacenamiento suficiente para imágenes y base de datos.
+<h2>📹 Video de Demostración</h2>
+<p>
+Puedes ver el sistema en funcionamiento aquí:  
+<a href="video_demo.mp4" target="_blank">🎥 Ver Video Demo</a>  
+<em>(Incluye el archivo <code>video_demo.mp4</code> en la carpeta raíz del repositorio)</em>
+</p>
 
-4.2 Software 
-• Sistema operativo: Linux, Windows o macOS. 
-• Python 3.8+. 
-• Dependencias listadas en requirements.txt. 
-• Navegador web compatible (Chrome, Firefox, Edge).
+<hr>
 
-5. Instalación 
-1) Clonar el repositorio o copiar los archivos del proyecto. 
-2) Crear y activar un entorno virtual de Python. 
-3) Instalar las dependencias: pip install -r requirements.txt 
-4) Configurar variables de entorno (SECRET_KEY, ESP32_STREAM_URL). 
-5) Crear las carpetas data/autorizados y data/intrusos (si no existen). 
-6) Ejecutar la aplicación con: python app.py
+<h2>🏗 Arquitectura</h2>
+<ul>
+  <li><strong>Capa Web (Flask)</strong>: Autenticación, vistas HTML, API JSON.</li>
+  <li><strong>Motor de Reconocimiento</strong>: Procesamiento de video, detección y comparación de rostros.</li>
+  <li><strong>Persistencia</strong>: Base de datos SQLite + almacenamiento en sistema de archivos.</li>
+  <li><strong>Dispositivo de captura</strong>: ESP32-CAM como fuente de video MJPEG.</li>
+</ul>
 
-6. Configuración 
-• SECRET_KEY: clave para sesiones Flask. 
-• ESP32_STREAM_URL: URL del stream de la cámara ESP32-CAM. 
-• AUTH_TOLERANCE e INTRUSO_TOLERANCE: tolerancias de comparación facial. 
-• Debug: desactivar en producción.
+<hr>
 
-8. Operación 
-1) Acceder vía navegador a la dirección del servidor. 
-2) Iniciar sesión con credenciales válidas. 
-3) Para transmitir video: ir a la sección de transmisión. 
-4) Para registrar autorizados: cargar imagen o capturar desde la cámara. 
-5) Revisar intrusos en su sección y eliminarlos si es necesario. 
-6) Administrar usuarios (solo admin).
-   
-8. Mantenimiento 
-• Respaldar regularmente la base de datos y las carpetas de datos. 
-• Revisar y rotar la SECRET_KEY periódicamente. 
-• Actualizar dependencias de Python con precaución. 
-• Monitorear el uso de disco y limpiar imágenes obsoletas.
+<h2>💻 Requisitos</h2>
 
-10. Solución de Problemas 
-• Error de conexión a cámara: verificar ESP32-CAM y URL. 
-• Reconocimiento lento: reducir resolución o ajustar tolerancias. 
-• Fallos en instalación: revisar versión de Python y dependencias.
+<h3>Hardware</h3>
+<ul>
+  <li>PC o servidor con <strong>Python 3.8+</strong></li>
+  <li><strong>ESP32-CAM</strong> con firmware MJPEG</li>
+  <li>Cámara ≥ 640x480 px</li>
+  <li>Espacio suficiente para imágenes y base de datos</li>
+</ul>
 
-12. Seguridad 
-• Cambiar credenciales por defecto inmediatamente. 
-• Usar HTTPS para proteger la transmisión. 
-• Restringir acceso a la interfaz de administración. 
-• Implementar protección CSRF para formularios.
+<h3>Software</h3>
+<ul>
+  <li>Linux, Windows o macOS</li>
+  <li>Python 3.8+</li>
+  <li>Navegador web (Chrome, Firefox, Edge)</li>
+  <li>Dependencias en <code>requirements.txt</code></li>
+</ul>
 
-14. Anexos 
-• requirements.txt con dependencias. 
-• Scripts de inicialización de la base de datos. 
-• Estructura de carpetas del proyecto.
+<hr>
+
+<h2>⚙️ Instalación</h2>
+<pre>
+# 1. Clonar repositorio
+git clone https://github.com/usuario/sistema-reconocimiento-facial.git
+cd sistema-reconocimiento-facial
+
+# 2. Crear entorno virtual
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+
+# 3. Instalar dependencias
+pip install -r requirements.txt
+
+# 4. Configurar variables de entorno
+export SECRET_KEY="clave_segura"
+export ESP32_STREAM_URL="http://ip_esp32:puerto"
+
+# 5. Crear carpetas necesarias
+mkdir -p data/autorizados data/intrusos
+
+# 6. Ejecutar aplicación
+python app.py
+</pre>
+
+<hr>
+
+<h2>🔧 Configuración</h2>
+<ul>
+  <li><code>SECRET_KEY</code>: clave para sesiones Flask.</li>
+  <li><code>ESP32_STREAM_URL</code>: URL del stream MJPEG de la ESP32-CAM.</li>
+  <li><code>AUTH_TOLERANCE</code> y <code>INTRUSO_TOLERANCE</code>: tolerancias para la coincidencia facial.</li>
+  <li><code>Debug</code>: desactivar en producción.</li>
+</ul>
+
+<hr>
+
+<h2>🚀 Uso</h2>
+<ol>
+  <li>Abrir el navegador y acceder a la URL del servidor.</li>
+  <li>Iniciar sesión con credenciales válidas.</li>
+  <li>Acceder a la sección de transmisión para ver la cámara.</li>
+  <li>Registrar usuarios autorizados cargando una imagen o desde la cámara.</li>
+  <li>Revisar y gestionar registros de intrusos.</li>
+  <li>Administrar usuarios (solo rol administrador).</li>
+</ol>
+
+<hr>
+
+<h2>🛠 Mantenimiento</h2>
+<ul>
+  <li>Respaldar la base de datos y carpetas <code>data</code>.</li>
+  <li>Rotar <code>SECRET_KEY</code> periódicamente.</li>
+  <li>Actualizar dependencias con precaución.</li>
+  <li>Limpiar imágenes obsoletas.</li>
+</ul>
+
+<hr>
+
+<h2>🔒 Seguridad</h2>
+<ul>
+  <li>Cambiar credenciales por defecto.</li>
+  <li>Usar HTTPS para transmisión.</li>
+  <li>Restringir acceso a la interfaz de administración.</li>
+  <li>Implementar CSRF en formularios.</li>
+</ul>
+
+<hr>
+
+<h2>📂 Estructura del Proyecto</h2>
+<pre>
+├── app.py
+├── requirements.txt
+├── static/
+├── templates/
+├── data/
+│   ├── autorizados/
+│   └── intrusos/
+├── database.sqlite
+└── video_demo.mp4
+</pre>
+
+<hr>
+
+<h2>👨‍💻 Autor</h2>
+<p>
+<strong>Equipo de Desarrollo</strong><br>
+📅 Versión 1.6 – Agosto 2025
+</p>
